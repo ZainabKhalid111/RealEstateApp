@@ -1,17 +1,10 @@
 import express from "express";
+import { addPost, deletePost, getPost, updatePost } from "../controllers/post.controller.js";
 const router = express.Router();
 
-router.get("/test", (req, res) => {
-    res.send("router works")
-})
-router.post("/test", (req, res) => {
-    res.send("router works")
-})
-router.put("/test", (req, res) => {
-    res.send("router works")
-})
-router.delete("/test", (req, res) => {
-    res.send("router works")
-})
+router.get("/getpost", getPost)
+router.post("/addpost", addPost)
+router.put("/updatepost", updatePost)
+router.delete("/deletepost", deletePost)
 
 export default router;
