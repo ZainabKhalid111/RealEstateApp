@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import prisma from '../lib/prisma.js';
-
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
     const { username, email, password } = req.body;
@@ -17,36 +17,56 @@ export const register = async (req, res) => {
             }
         })
 
-        console.log(newUser);
+        // console.log(newUser);
         res.status(201).json({ message: "User created successfully" })
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Failed to create User" })
     }
 }
 
-export const login = (req, res) => {
+export const login = async (req, res) => {
     const { email, password } = req.body;
     try {
         //check if user exists
-        const user = prisma.user.findUnique({ where: { email } });
+        const user = await prisma.user.findUnique({ where: { email } });
 
-        if (!user) res.status(401).json({ message: "Invalid credentials" })
+        if (!user) {
+            return res.status(401).json({ message: "Invalid credentials" });
+        }
 
         //  check if the password is correct
+        const passwordValid = await bcrypt.compare(password, user.password);
+        if (!passwordValid) {
+            return res.status(401).json({ message: "Invalid credentials" });
+        }
 
-        const passwordValid = bcrypt.compare(password, user.password);
-        if (!passwordValid) res.status(401).json({ message: "Invalid credentials" })
+        //if user and password is valid then generate cookie token and send to the user
+
+        const age = 1000 * 60 * 60 * 24 * 7; // 1 week
+        const secretKey = process.env.JWT_SECRET_KEY;
+        // setting jwt token instead of cookies
+        const token = jwt.sign({
+            id: user.id
+        }, secretKey, {
+            expiresIn: age
+        })
+
+        // res.setHeader("Set-Cookie", "test=" + "myValue").json("Success!")
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            // secure:true // can use it with https url
+            maxAge: age,
+        }).status(200).json({ message: "Login successful!" })
 
 
-        //generate cookie token and send to the user
+
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Failed to login!" })
     }
 
 }
 
 export const logout = (req, res) => {
-    console.log("logout")
+    res.clearCookie("token").status(200).json({ message: "Logout successfully!" })
 }
