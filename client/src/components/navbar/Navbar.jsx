@@ -5,6 +5,26 @@ import { Link } from "react-router-dom";
 function Navbar() {
   const [open, setOpen] = useState(false);
 
+  const tabs = [
+    {
+      navItem: "Home",
+      path: "/"
+    },
+    {
+      navItem: "About",
+      path: "/"
+    },
+    {
+      navItem: "Contact",
+      path: "/"
+    },
+    {
+      navItem: "Agents",
+      path: "/"
+    },
+
+  ];
+
   const user = true;
   return (
     <nav>
@@ -13,10 +33,10 @@ function Navbar() {
           <img src="/favicon.ico" alt="" />
           <span>RealEstate</span>
         </Link>
-        <Link to="/">Home</Link>
-        <Link to="/">About</Link>
-        <Link to="/">Contact</Link>
-        <Link to="/">Agents</Link>
+        {tabs.map((tab, index) => (
+          <Link to={tab.path} key={index}>{tab.navItem}</Link>
+        ))}
+
       </div>
       <div className="right">
         {user ? (
@@ -47,10 +67,9 @@ function Navbar() {
           />
         </div>
         <div className={open ? "menu active" : "menu"}>
-          <Link to="/">Home</Link>
-          <Link to="/">About</Link>
-          <Link to="/">Contact</Link>
-          <Link to="/">Agents</Link>
+          {tabs.map((tab, index) => (
+            <Link to={tab.path} key={index}>{tab.navItem}</Link>
+          ))}
           <Link to="/">Sign in</Link>
           <Link to="/">Sign up</Link>
         </div>
