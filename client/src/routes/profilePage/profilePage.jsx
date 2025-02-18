@@ -1,8 +1,31 @@
+import { useNavigate } from "react-router-dom";
 import Chat from "../../components/chat/Chat";
 import List from "../../components/list/List";
+import {axiosInstance} from '../../lib/apiRequest'
 import "./profilePage.scss";
+import { toast } from 'react-toastify'
+import { useState } from "react";
 
 function ProfilePage() {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axiosInstance.post("/auth/logout");
+      localStorage.clear("user");
+      toast.success("Logout Successful");
+      navigate('/')
+
+    } catch (error) {
+      toast.error("Something went wrong. Try later!")
+    } finally {
+      setIsLoading(true);
+
+    }
+  }
+
   return (
     <div className="profilePage">
       <div className="details">
@@ -25,6 +48,7 @@ function ProfilePage() {
             <span>
               E-mail: <b>john@gmail.com</b>
             </span>
+            <button onClick={handleLogout} disabled={isLoading}>Logout</button>
           </div>
           <div className="title">
             <h1>My List</h1>
@@ -39,7 +63,7 @@ function ProfilePage() {
       </div>
       <div className="chatContainer">
         <div className="wrapper">
-          <Chat/>
+          <Chat />
         </div>
       </div>
     </div>

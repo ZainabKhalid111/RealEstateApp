@@ -9,44 +9,47 @@ import SinglePage from "./routes/singlePage/singlePage";
 import ProfilePage from "./routes/profilePage/profilePage";
 import Login from "./routes/login/login";
 import Register from "./routes/register/register";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Layout />,
-      children:[
+      children: [
         {
-          path:"/",
-          element:<HomePage/>
+          path: "/",
+          element: <HomePage />
         },
         {
-          path:"/list",
-          element:<ListPage/>
+          path: "/list",
+          element: <ListPage />
         },
         {
-          path:"/:id",
-          element:<SinglePage/>
+          path: "/:id",
+          element: <SinglePage />
         },
         {
-          path:"/profile",
-          element:<ProfilePage/>
+          path: "/profile",
+          element: <ProfilePage />
         },
         {
-          path:"/login",
-          element:<Login/>
+          path: "/login",
+          element: <Login />
         },
         {
-          path:"/register",
-          element:<Register/>
+          path: "/register",
+          element: <Register />
         }
       ]
     }
   ]);
 
   return (
-
-    <RouterProvider router={router}/>
+    <>
+      <ToastContainer />
+      <RouterProvider router={router} />
+    </>
   );
 }
 
