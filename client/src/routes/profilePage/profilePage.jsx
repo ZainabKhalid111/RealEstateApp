@@ -4,17 +4,21 @@ import List from "../../components/list/List";
 import {axiosInstance} from '../../lib/apiRequest'
 import "./profilePage.scss";
 import { toast } from 'react-toastify'
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthContextFile";
 
 function ProfilePage() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+    const { currentUser, updateUser } = useContext(AuthContext)
+  
 
   const handleLogout = async () => {
     setIsLoading(true);
     try {
       const response = await axiosInstance.post("/auth/logout");
-      localStorage.clear("user");
+      // localStorage.clear("user");
+      updateUser(null)
       toast.success("Logout Successful");
       navigate('/')
 
@@ -38,15 +42,15 @@ function ProfilePage() {
             <span>
               Avatar:
               <img
-                src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+               src={currentUser.avatar || "/noavatar.jpg"}
                 alt=""
               />
             </span>
             <span>
-              Username: <b>John Doe</b>
+              Username: <b>{currentUser.username}</b>
             </span>
             <span>
-              E-mail: <b>john@gmail.com</b>
+              E-mail: <b>{currentUser.email}</b>
             </span>
             <button onClick={handleLogout} disabled={isLoading}>Logout</button>
           </div>

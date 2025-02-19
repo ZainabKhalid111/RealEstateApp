@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./navbar.scss";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContextFile";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
+  const { currentUser } = useContext(AuthContext)
 
   const tabs = [
     {
@@ -25,7 +27,7 @@ function Navbar() {
 
   ];
 
-  const user = true;
+
   return (
     <nav>
       <div className="left">
@@ -39,13 +41,13 @@ function Navbar() {
 
       </div>
       <div className="right">
-        {user ? (
+        {currentUser ? (
           <div className="user">
             <img
-              src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+              src={currentUser.avatar || "/noavatar.jpg"}
               alt=""
             />
-            <span>John Doe</span>
+            <span>{currentUser.username}</span>
             <Link to="/profile" className="profile">
               <div className="notification">3</div>
               <span>Profile</span>
@@ -53,8 +55,8 @@ function Navbar() {
           </div>
         ) : (
           <>
-            <Link to="/">Sign in</Link>
-            <Link to="/" className="register">
+            <Link to="/login">Sign in</Link>
+            <Link to="/register" className="register">
               Sign up
             </Link>
           </>
@@ -70,8 +72,8 @@ function Navbar() {
           {tabs.map((tab, index) => (
             <Link to={tab.path} key={index}>{tab.navItem}</Link>
           ))}
-          <Link to="/">Sign in</Link>
-          <Link to="/">Sign up</Link>
+          <Link to="/login">Sign in</Link>
+          <Link to="/register">Sign up</Link>
         </div>
       </div>
     </nav>
