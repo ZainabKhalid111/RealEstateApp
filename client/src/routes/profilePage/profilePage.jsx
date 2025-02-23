@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Chat from "../../components/chat/Chat";
 import List from "../../components/list/List";
-import {axiosInstance} from '../../lib/apiRequest'
+import { axiosInstance } from '../../lib/apiRequest'
 import "./profilePage.scss";
 import { toast } from 'react-toastify'
 import { useContext, useState } from "react";
@@ -10,8 +10,8 @@ import { AuthContext } from "../../context/AuthContextFile";
 function ProfilePage() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-    const { currentUser, updateUser } = useContext(AuthContext)
-  
+  const { currentUser, updateUser } = useContext(AuthContext)
+
 
   const handleLogout = async () => {
     setIsLoading(true);
@@ -30,19 +30,23 @@ function ProfilePage() {
     }
   }
 
+  const handleUpdateProfile = () => {
+    navigate('/update-profile')
+  }
+
   return (
     <div className="profilePage">
       <div className="details">
         <div className="wrapper">
           <div className="title">
             <h1>User Information</h1>
-            <button>Update Profile</button>
+            <button onClick={handleUpdateProfile}>Update Profile</button>
           </div>
           <div className="info">
             <span>
               Avatar:
               <img
-               src={currentUser.avatar || "/noavatar.jpg"}
+                src={currentUser.avatar || "/user.png"}
                 alt=""
               />
             </span>

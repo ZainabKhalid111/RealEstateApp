@@ -10,6 +10,7 @@ import ProfilePage from "./routes/profilePage/profilePage";
 import Login from "./routes/login/login";
 import Register from "./routes/register/register";
 import { ToastContainer } from "react-toastify";
+import ProfileUpdatePage from "./routes/profileUpdatePage/profileUpdatePage";
 
 function App() {
   const router = createBrowserRouter([
@@ -46,6 +47,16 @@ function App() {
         {
           path: "/profile",
           element: <ProfilePage />
+        },
+      ]
+    },
+    {
+      path: "/",
+      element: <RequiredAuth />,
+      children: [
+        {
+          path: "/update-profile",
+          element: <ProfileUpdatePage />
         },
       ]
     }
